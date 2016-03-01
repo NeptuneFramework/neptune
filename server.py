@@ -26,4 +26,4 @@ while True:
     print(x.method)
     print(x.request_data)
     c.sendall(res_obj.response)
-    c.close()     
+    c.close()

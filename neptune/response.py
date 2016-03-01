@@ -4,7 +4,7 @@ class HTTPResponse(object):
     """
 
     def __init__(self, http_version='', status='', headers={}, body=''):
-        self.response = self._generate_response(http_ver, status, headers, body)
+        self.response = self._generate_response(http_version, status, headers, body)
 
     def _generate_response(self, http_version, status, headers, body):
         base = "{0} {1}\r\n".format(http_version, status)

@@ -4,5 +4,5 @@ class Neptune(object):
     :Classname maybe changed
     """
 
-    def __init__(self):
+    def __init__(self, host, port, **kwargs):
         pass
