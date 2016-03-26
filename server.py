@@ -1,6 +1,15 @@
 import socket
 from neptune.handler import HTTPHandler
 from neptune.response import HTTPResponse
+from neptune.router import NRouter
+
+class HelloWorld(object):
+    def get(self):
+        return HTTPResponse(http_version='HTTP/1.1', status="200 OK",
+                       headers={'Content-Type': 'application/json', 'Server': 'Neptune'},
+                       body='{"yash": "epicness"}').response
+
+
 
 s = socket.socket(socket.AF_INET,
                   socket.SOCK_STREAM)
@@ -12,6 +21,8 @@ res_obj = HTTPResponse(http_version='HTTP/1.1', status="200 OK",
                        headers={'Content-Type': 'application/json', 'Server': 'Neptune'},
                        body='{"yash": "epic"}')
 
+router = NRouter()
+router.add_rule('/', HelloWorld)
 
 s.listen(3)
 while True:
@@ -19,11 +30,8 @@ while True:
     print('Got connection from', addr)
     data = c.recv(4096).decode()
     x = HTTPHandler(data)
-    print("Method: " + x.method)
-    print(x.headers)
-    print(x.http_version)
     print(x.path)
-    print(x.method)
-    print(x.request_data)
-    c.sendall(res_obj.response)
+    epic = router.get_cls(x.path)
+    resp = getattr(epic, x.method.lower())()
+    c.sendall(resp)
     c.close()
