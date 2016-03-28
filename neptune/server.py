@@ -5,7 +5,6 @@ from socket import (
 )
 
 from neptune.handler import HTTPHandler
-from neptune.response import HTTPResponse
 from neptune.adapter import NAdapter
 from neptune.router import NRouter
 
@@ -50,5 +49,5 @@ class NServer(object):
             request = HTTPHandler(data_recv)
 
             response = self._process_request(request)
-            connection.sendall(response)
+            connection.sendall(response.encoded())
             connection.close()
