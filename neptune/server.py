@@ -4,7 +4,7 @@ from socket import (
     socket
 )
 
-from neptune.handler import HTTPHandler
+from neptune.handler import NRequest
 from neptune.adapter import NAdapter
 from neptune.router import NRouter
 
@@ -24,12 +24,13 @@ class NServer(object):
         self.router = NRouter()
 
     def _process_request(self, request):
-        route = request.path
+        route = request.route
         method = request.method.lower()
 
         # TODO: Option to add decorators
         try:
             view_cls = self.router.get_cls(route)
+            setattr(view_cls, 'request', request)
             view_func = getattr(view_cls, method)
             return view_func()
         except Exception as e:
@@ -46,7 +47,7 @@ class NServer(object):
             print('Got connection from ', address)  # Move it to if self.debug
 
             data_recv = connection.recv(4096).decode()  # why 4096 ? Think of better variable name too
-            request = HTTPHandler(data_recv)
+            request = NRequest(data_recv)
 
             response = self._process_request(request)
             connection.sendall(response.encoded())

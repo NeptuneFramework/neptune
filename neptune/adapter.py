@@ -1,10 +1,10 @@
-from neptune.handler import HTTPHandler
+from neptune.handler import NRequest
 from neptune.response import HTTPResponse
 from neptune.router import NRouter
 
 class NAdapter(object):
     """
-    Bridges HTTPHandler, HTTPResponse and NRouter
+    Bridges NRequest, HTTPResponse and NRouter
     """
 
     def __init__(self):
