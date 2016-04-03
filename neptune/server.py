@@ -1,6 +1,8 @@
 from socket import (
     AF_INET,
+    SO_REUSEADDR,
     SOCK_STREAM,
+    SOL_SOCKET,
     socket
 )
 
@@ -16,6 +18,7 @@ class NServer(object):
 
     def __init__(self, host='', port=7500):
         self.nsocket = socket(AF_INET, SOCK_STREAM)
+        self.nsocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         self.host = host
         self.port = port
         self.nsocket.bind((self.host, self.port))
