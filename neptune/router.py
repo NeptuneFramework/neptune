@@ -1,3 +1,5 @@
+from neptune.base_classes import Error404
+
 class NRouter(object):
     """
     The URL route handling class
@@ -25,4 +27,4 @@ class NRouter(object):
         for a in self.rules:
             if a['route'] == route:
                 return a['class']()
-        return '404'
+        return Error404()
