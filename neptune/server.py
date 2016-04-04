@@ -9,6 +9,7 @@ from socket import (
 from neptune.handler import NRequest
 from neptune.adapter import NAdapter
 from neptune.router import NRouter
+from neptune.session import NSession
 
 
 class NServer(object):
@@ -25,6 +26,7 @@ class NServer(object):
         # TODO: listen here or in run
         self.nsocket.listen(3)
         self.router = NRouter()
+        self.session = NSession()
 
     def _process_request(self, request):
         route = request.route
@@ -53,5 +55,10 @@ class NServer(object):
             request = NRequest(data_recv)
 
             response = self._process_request(request)
+            if self.session.used:
+                # add_header(key, val)
+                response.add_header(self.session.key, self.session.curr_sess_id)#self.session.curr_sess_id)
+                self.session.clear_curr_sess()
+
             connection.sendall(response.encoded())
             connection.close()

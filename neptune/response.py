@@ -7,9 +7,17 @@ class NResponse(object):
     """
 
     def __init__(self, http_version='', status='', headers={}, body=''):
-        self.response = self._generate_response(http_version, status, headers, body)
+        self.http_version = http_version
+        self.headers = headers
+        self.status = status
+        self.body = body
+        self.response = ''
 
     def encoded(self):
+        self.response = self._generate_response(self.http_version,
+                                                self.status,
+                                                self.headers,
+                                                self.body)
         return self.response.encode()
 
     def _generate_response(self, http_version, status, headers, body):
@@ -21,6 +29,9 @@ class NResponse(object):
         base += body
 
         return base
+
+    def add_header(self, key, value):
+        self.headers.update({'Set-Cookie': '{0}={1}'.format(key, value)})
 
 
 class HTTPResponse(NResponse):

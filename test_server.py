@@ -1,17 +1,17 @@
 import datetime
 from neptune.server import NServer
-from neptune.session import NSession
 from neptune.response import JSONResponse, HTTPResponse
 
-key = "1"
+key = "2"
 data = "username"
 date = datetime.datetime.now()
 
-session = NSession()
-session.initialize_session(key,data)
+# session = NSession()
+# session.initialize_session(key,data)
 
 class HelloWorld(object):
     def get(self):
+    	app.session.initialize_session(key,data)
     	print (self.request.params)
     	print (self.request)
     	xyz = JSONResponse({"hello": "world", "numbers": [1,2,3,4,5]})
