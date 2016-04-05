@@ -6,21 +6,21 @@ key = "2"
 data = "username"
 date = datetime.datetime.now()
 
-# session = NSession()
-# session.initialize_session(key,data)
 
 class HelloWorld(object):
     def get(self):
         app.session.initialize_session(key,data)
-        print(self.request.params)
         xyz = JSONResponse({"hello": "world", "numbers": [1,2,3,4,5]})
         return xyz
 
 class ByeWorld(object):
     def get(self):
-        print(self.request.headers)
+        try:
+        	sess_id = self.request.cookies['session_id']
+        	print(app.session.get_value(key, sess_id))
+        except Exception as e:
+        	print(str(e))
         abc = HTTPResponse("Bye World")
-        print(self.request.cookies)
         return abc
 
 app = NServer(port=5000)
