@@ -19,6 +19,7 @@ class HelloWorld(object):
 
 class ByeWorld(object):
     def get(self):
+        print(self.request.headers)
         abc = HTTPResponse("Bye World")
         return abc
 
