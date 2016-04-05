@@ -40,7 +40,7 @@ class NServer(object):
             return view_func()
         except Exception as e:
             print(str(e))
- 
+
 
     def run(self):
         """
@@ -55,9 +55,9 @@ class NServer(object):
             request = NRequest(data_recv)
 
             response = self._process_request(request)
+            # TODO: Add encryption
             if self.session.used:
-                # add_header(key, val)
-                response.add_header(self.session.key, self.session.curr_sess_id)#self.session.curr_sess_id)
+                response.add_header(self.session.key, self.session.curr_sess_id)
                 self.session.clear_curr_sess()
 
             connection.sendall(response.encoded())

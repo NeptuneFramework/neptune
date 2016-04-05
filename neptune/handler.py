@@ -17,6 +17,7 @@ class NRequest(object):
         self.route = urlparse(self.url).path
         self.params = self._get_request_params(self.url)
         self.headers = self._get_headers_dict(self.headers_list)
+        self.cookies = self._get_cookies_from_headers(self.headers)
 
     def _get_headers_dict(self, headers_list):
         """
@@ -38,3 +39,16 @@ class NRequest(object):
         parsed_params = parse_qs(parsed_url.query)
         parsed_params = {key:parsed_params[key][0] for key in parsed_params}
         return parsed_params
+
+    def _get_cookies_from_headers(self, headers):
+        """
+        """
+
+        cookies = {}
+        data = headers.get('Cookie')
+        if data:
+            data = data.split(';')
+            data = map(str.strip, data)
+            [cookies.update({dat.split('=')[0]: dat.split('=')[1]}) for dat in data]
+
+        return cookies
