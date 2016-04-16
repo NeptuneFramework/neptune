@@ -9,6 +9,8 @@ c = conn.cursor()
 #           session_data    TEXT           NOT NULL, \
 #           expire_date     DATETIME       NOT NULL);''')
 
+# TODO: Use SQLAlchemy for this all stuff
+# TODO: Check if session_id exists or not
 
 class NSession(object):
     """
@@ -34,13 +36,17 @@ class NSession(object):
         self.curr_sess_id = 0
         self.key = 'session_id'
 
-    def initialize_session(self, key, data, date=datetime.datetime.now()):
+    def set_value(self, key, value, date=datetime.datetime.now()):
         #TODO check requests headers for set cookie
         self.used = True
-        date = date + datetime.timedelta(days=10)
-        self.c.execute("INSERT INTO session (session_key, session_data, expire_date) VALUES (?, ?, ?)", (key, data, date))
-        self.curr_sess_id = self.c.lastrowid
-        self.conn.commit()
+        date += datetime.timedelta(days=10)
+        if self.curr_sess_id == 0:
+            self.c.execute("INSERT INTO session (session_key, session_data, expire_date) VALUES (?, ?, ?)", (key, value, date))
+            self.curr_sess_id = self.c.lastrowid
+            self.conn.commit()
+        else:
+            self.c.execute("INSERT INTO session (id, session_key, session_data, expire_date) VALUES (?, ?, ?)", (self.curr_sess_id, key, value, date))
+            self.conn.commit()
 
     def get_value(self, key, sess_id):
         data = self.conn.execute("Select session_data from session where session_key = %s and id = %s limit 1" % (key, sess_id))

@@ -30,7 +30,7 @@ class NResponse(object):
 
         return base
 
-    def add_header(self, key, value):
+    def set_cookie(self, key, value):
         self.headers.update({'Set-Cookie': '{0}={1}'.format(key, value)})
 
 

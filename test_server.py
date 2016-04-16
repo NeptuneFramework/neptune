@@ -9,7 +9,7 @@ date = datetime.datetime.now()
 
 class HelloWorld(object):
     def get(self):
-        app.session.initialize_session(key,data)
+        app.session.set_value(key,data)
         xyz = JSONResponse({"hello": "world", "numbers": [1,2,3,4,5]})
         return xyz
 
@@ -29,3 +29,9 @@ app.router.add_rule('/yash', ByeWorld)
 
 if __name__ == "__main__":
     app.run()
+
+# Feature Set List
+# Cookie
+# Routing
+# Session
+# Db
