@@ -1,4 +1,7 @@
+import os
 import json
+
+from jinja2 import Template
 
 
 class NResponse(object):
@@ -58,3 +61,16 @@ class JSONResponse(HTTPResponse):
     def __init__(self, body):
         # TODO: Raise error if body can't be json dumped
         super().__init__(json.dumps(body), headers={'Content-Type': 'application/json'})
+
+
+class HTMLResponse(HTTPResponse):
+    """
+    For sending HTML Responses
+    """
+
+    def __init__(self, template, context={}):
+        # TODO: Raise error if template not found
+        html_path = os.path.join(os.getcwd(), 'templates', template)
+        html = open(html_path).read()
+        html = Template(html).render(**context)
+        super().__init__(html, headers={'Content-Type': 'text/html'})

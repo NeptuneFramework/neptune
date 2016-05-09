@@ -1,3 +1,4 @@
+import os
 from socket import (
     AF_INET,
     SO_REUSEADDR,
@@ -10,7 +11,6 @@ from neptune.handler import NRequest
 from neptune.adapter import NAdapter
 from neptune.router import NRouter
 from neptune.session import NSession
-
 
 class NServer(object):
     """
@@ -57,7 +57,7 @@ class NServer(object):
             # if session_id cookie is there in request,
             # set, self.session.curr_sess_id = that_id
 
-            if self.request.cookies.get('session_id'):
+            if request.cookies.get('session_id'):
                 # Decrypt if encrypted etc.
                 self.session.curr_sess_id = self.request.cookies['session_id']
 
