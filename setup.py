@@ -8,8 +8,6 @@ setup(
     description='Web Framework with full control',
     author='Yash Mehrotra',
     author_email='yashmehrotra95@gmail.com',
-    packages=[
-        'jinja2',
-        ''
-    ],
+    packages=['neptune'],
+    install_requires=['jinja2']
 )
