@@ -1,14 +1,6 @@
 import sqlite3
 import datetime
 
-conn = sqlite3.connect('neptune_session.db')
-c = conn.cursor()
-# c.execute('''CREATE TABLE session \
-#           (id             INTEGER        PRIMARY KEY  AUTOINCREMENT, \
-#           session_key     VARCHAR(25)    NOT NULL, \
-#           session_data    TEXT           NOT NULL, \
-#           expire_date     DATETIME       NOT NULL);''')
-
 # TODO: Use SQLAlchemy for this all stuff
 # TODO: Check if session_id exists or not
 
@@ -30,8 +22,19 @@ class NSession(object):
     """
 
     def __init__(self):
-        self.conn = sqlite3.connect('neptune_session.db')
+        self.db_name = '.neptune_session.db'
+        self.conn = sqlite3.connect(self.db_name)
         self.c = self.conn.cursor()
+        try:
+            self.c.execute('''CREATE TABLE session \
+                            (id             INTEGER        PRIMARY KEY  AUTOINCREMENT, \
+                            session_key     VARCHAR(25)    NOT NULL, \
+                            session_data    TEXT           NOT NULL, \
+                            expire_date     DATETIME       NOT NULL);''')
+
+            self.conn.commit()
+        except:
+            pass
         self.used = False
         self.curr_sess_id = 0
         self.key = 'session_id'
@@ -45,11 +48,11 @@ class NSession(object):
             self.curr_sess_id = self.c.lastrowid
             self.conn.commit()
         else:
-            self.c.execute("INSERT INTO session (id, session_key, session_data, expire_date) VALUES (?, ?, ?)", (self.curr_sess_id, key, value, date))
+            self.c.execute("INSERT INTO session (id, session_key, session_data, expire_date) VALUES (?, ?, ?, ?)", (self.curr_sess_id, key, value, date))
             self.conn.commit()
 
-    def get_value(self, key, sess_id):
-        data = self.conn.execute("Select session_data from session where session_key = %s and id = %s limit 1" % (key, sess_id))
+    def get_value(self, key):
+        data = self.conn.execute("Select session_data from session where session_key = %s and id = %s limit 1" % (key, self.curr_sess_id))
         data = [i for i in data]
         return data[0][0]
 

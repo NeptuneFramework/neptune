@@ -56,10 +56,9 @@ class NServer(object):
 
             # if session_id cookie is there in request,
             # set, self.session.curr_sess_id = that_id
-
             if request.cookies.get('session_id'):
                 # Decrypt if encrypted etc.
-                self.session.curr_sess_id = self.request.cookies['session_id']
+                self.session.curr_sess_id = request.cookies['session_id']
 
             response = self._process_request(request)
             # TODO: Add encryption
